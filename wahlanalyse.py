@@ -1,4 +1,3 @@
-
 from view import Ui_MainWindow
 from PySide.QtGui import QApplication, QMainWindow, QFileDialog
 import sys
@@ -6,11 +5,15 @@ from save_db import SaveToDBDialog
 
 from csvutil import CSVUtil
 from dicttablemodel import DictTableModel
+from dbconnection import DBConnection
+
 
 class WahlAnalyse(QMainWindow):
-
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.db = DBConnection("172.16.6.137", "root", "password", "wahl")
+
         self.gui = Ui_MainWindow()
         self.gui.setupUi(self)
         self.gui.actionOpen.triggered.connect(self.open_file)
@@ -28,7 +31,7 @@ class WahlAnalyse(QMainWindow):
         self.sdb_dialog = SaveToDBDialog(self)
 
     def add_row(self):
-        self.tbm.insertRows(self.tbm.rowCount(self),1)
+        self.tbm.insertRows(self.tbm.rowCount(self), 1)
 
     def open_file(self):
         self.file = QFileDialog.getOpenFileName(self, "Choose File", filter="CSV-File (*.csv)")[0]
@@ -42,7 +45,8 @@ class WahlAnalyse(QMainWindow):
             CSVUtil.write(self.file, self.tbm.get_list())
 
     def save_file_as(self):
-        self.file = QFileDialog.getSaveFileName(self, "CSV-Datei speichern", dir=self.file, filter="CSV-Datei (*.csv)")[0]
+        self.file = QFileDialog.getSaveFileName(self, "CSV-Datei speichern", dir=self.file, filter="CSV-Datei (*.csv)")[
+            0]
         if self.file != '':
             self.save_file()
 
@@ -52,10 +56,14 @@ class WahlAnalyse(QMainWindow):
     def copy_cs(self):
         pass
 
+    def save_data_db(self,termin):
+        self.db.write_data(self.tbm.get_list(),termin)
+
     def open_save_db(self):
         self.setDisabled(True)
         self.sdb_dialog.setEnabled(True)
         self.sdb_dialog.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

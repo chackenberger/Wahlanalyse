@@ -13,7 +13,7 @@ class SaveToDBDialog(QDialog):
     def accept(self, *args, **kwargs):
         print("Accept")
         self.hide()
-        print(self.gui.calendarWidget.selectedDate().toPython())
+        self.parent.save_data_db(self.gui.calendarWidget.selectedDate().toPython())
 
     def reject(self, *args, **kwargs):
         print("Reject")
