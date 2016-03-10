@@ -2,6 +2,7 @@
 from view import Ui_MainWindow
 from PySide.QtGui import QApplication, QMainWindow, QFileDialog
 import sys
+from save_db import SaveToDBDialog
 
 from csvutil import CSVUtil
 from dicttablemodel import DictTableModel
@@ -16,12 +17,15 @@ class WahlAnalyse(QMainWindow):
         self.gui.actionSave.triggered.connect(self.save_file)
         self.gui.actionSave_as.triggered.connect(self.save_file_as)
         self.gui.actionNew.triggered.connect(self.new_file)
-        self.gui.actionCopy_Cs.triggered.connect(self.copy_cs)
+        self.gui.actionCopy.triggered.connect(self.copy_cs)
         self.gui.actionAdd_Row.triggered.connect(self.add_row)
+        self.gui.actionSave_DB.triggered.connect(self.open_save_db)
 
         self.gui.tableView.setSortingEnabled(True)
 
         self.tbm = DictTableModel(list=[], parent=self)
+
+        self.sdb_dialog = SaveToDBDialog(self)
 
     def add_row(self):
         self.tbm.insertRows(self.tbm.rowCount(self),1)
@@ -47,6 +51,11 @@ class WahlAnalyse(QMainWindow):
 
     def copy_cs(self):
         pass
+
+    def open_save_db(self):
+        self.setDisabled(True)
+        self.sdb_dialog.setEnabled(True)
+        self.sdb_dialog.show()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
