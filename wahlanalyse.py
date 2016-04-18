@@ -2,6 +2,7 @@ from view import Ui_MainWindow
 from PySide.QtGui import QApplication, QMainWindow, QFileDialog
 import sys
 from save_db import SaveToDBDialog
+from load_db import LoadFromDBDialog
 
 from csvutil import CSVUtil
 from dicttablemodel import DictTableModel
@@ -23,12 +24,16 @@ class WahlAnalyse(QMainWindow):
         self.gui.actionCopy.triggered.connect(self.copy_cs)
         self.gui.actionAdd_Row.triggered.connect(self.add_row)
         self.gui.actionSave_DB.triggered.connect(self.open_save_db)
+        self.gui.actionOpen_DB.triggered.connect(self.open_load_db)
 
         self.gui.tableView.setSortingEnabled(True)
 
-        self.tbm = DictTableModel(list=[], parent=self)
+        self.tbm = DictTableModel(datalist=[], header=[], parent=self)
 
         self.sdb_dialog = SaveToDBDialog(self)
+        self.ldb_dialog = LoadFromDBDialog(self)
+
+        self.file = "."
 
     def add_row(self):
         self.tbm.insertRows(self.tbm.rowCount(self), 1)
@@ -36,7 +41,8 @@ class WahlAnalyse(QMainWindow):
     def open_file(self):
         self.file = QFileDialog.getOpenFileName(self, "Choose File", filter="CSV-File (*.csv)")[0]
         if self.file != '':
-            self.tbm.set_list(CSVUtil.read(self.file))
+            data, header = CSVUtil.read(self.file)
+            self.tbm.set_list(data, header)
             self.gui.tableView.reset()
             self.gui.tableView.setModel(self.tbm)
 
@@ -59,11 +65,22 @@ class WahlAnalyse(QMainWindow):
     def save_data_db(self,termin):
         self.db.write_data(self.tbm.get_list(),termin)
 
+    def load_data_db(self, termin):
+        data, header = self.db.read_data(termin)
+        self.tbm.set_list(data, header)
+        self.gui.tableView.reset()
+        self.gui.tableView.setModel(self.tbm)
+
     def open_save_db(self):
         self.setDisabled(True)
         self.sdb_dialog.setEnabled(True)
         self.sdb_dialog.show()
 
+    def open_load_db(self):
+        self.ldb_dialog.update_dates(self.db.get_termine())
+        self.setDisabled(True)
+        self.ldb_dialog.setEnabled(True)
+        self.ldb_dialog.show()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

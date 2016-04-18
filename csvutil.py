@@ -8,7 +8,7 @@ class CSVUtil:
         with open(filename, "r") as csv:
 
             sniffer = Sniffer()
-            sample = csv.read(1024)
+            sample = csv.read(4096)
             dialect = sniffer.sniff(sample, delimiters=[';', ','])
 
             csv.seek(0)
@@ -19,7 +19,7 @@ class CSVUtil:
             for line in lines_reader:
                 lines.append(line)
 
-            return lines
+            return lines, lines_reader.fieldnames
 
     @staticmethod
     def write(filename, lines, delimiter=';'):

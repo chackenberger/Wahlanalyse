@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WahlAnalyse_GUI.ui'
 #
-# Created: Thu Mar 10 10:29:51 2016
+# Created: Sun Apr 17 21:01:52 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -70,6 +70,8 @@ class Ui_MainWindow(object):
         self.actionRedo.setObjectName("actionRedo")
         self.actionSave_DB = QtGui.QAction(MainWindow)
         self.actionSave_DB.setObjectName("actionSave_DB")
+        self.actionOpen_DB = QtGui.QAction(MainWindow)
+        self.actionOpen_DB.setObjectName("actionOpen_DB")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_as)
@@ -85,6 +87,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionAdd_Row)
         self.menuEdit.addAction(self.actionDelete_Row)
         self.menuWindows.addAction(self.actionSave_DB)
+        self.menuWindows.addAction(self.actionOpen_DB)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuWindows.menuAction())
@@ -133,4 +136,5 @@ class Ui_MainWindow(object):
         self.actionRedo.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Shift+Z", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_DB.setText(QtGui.QApplication.translate("MainWindow", "Save to Database", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_DB.setStatusTip(QtGui.QApplication.translate("MainWindow", "Save data to Database", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpen_DB.setText(QtGui.QApplication.translate("MainWindow", "Open from Database", None, QtGui.QApplication.UnicodeUTF8))
 

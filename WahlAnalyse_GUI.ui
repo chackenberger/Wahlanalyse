@@ -61,6 +61,7 @@
      <string>Database</string>
     </property>
     <addaction name="actionSave_DB"/>
+    <addaction name="actionOpen_DB"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -221,6 +222,11 @@
    </property>
    <property name="statusTip">
     <string>Save data to Database</string>
+   </property>
+  </action>
+  <action name="actionOpen_DB">
+   <property name="text">
+    <string>Open from Database</string>
    </property>
   </action>
  </widget>
