@@ -64,6 +64,9 @@
     </property>
     <addaction name="actionSave_DB"/>
     <addaction name="actionOpen_DB"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_Prediction"/>
+    <addaction name="actionShow_Prediction"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -248,6 +251,16 @@
    </property>
    <property name="statusTip">
     <string>Duplicate Row and insert after</string>
+   </property>
+  </action>
+  <action name="actionCreate_Prediction">
+   <property name="text">
+    <string>Create Prediction</string>
+   </property>
+  </action>
+  <action name="actionShow_Prediction">
+   <property name="text">
+    <string>Show Prediction</string>
    </property>
   </action>
  </widget>

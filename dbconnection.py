@@ -10,11 +10,11 @@ class DBConnection:
     def __init__(self, host, username, password, dbname):
         pymysql.install_as_MySQLdb()
         db = 'mysql+mysqldb://' + username + ':' + password + '@' + host + '/' + dbname + '?charset=utf8'
-        engine = create_engine(db)
-        engine.connect()
-        self.s = Session(engine)
+        self.engine = create_engine(db)
+        self.engine.connect()
+        self.s = Session(self.engine)
         self.Base = automap_base()
-        self.Base.prepare(engine, reflect=True)
+        self.Base.prepare(self.engine, reflect=True)
 
     def write_data(self, data, termin):
         Wahl = self.Base.classes.wahl
@@ -32,7 +32,7 @@ class DBConnection:
 
             wahl = Wahl(termin=termin)
 
-            self.s.add(wahl)
+            self.s.merge(wahl)
 
             for l in data:
                 sp = Sprengel(snr=l["SPR"], bnr=l["BZ"], termin=termin, berechtigte=l["WBER"], ungueltige=l["UNG."], abgegeben=l["ABG."])
@@ -81,6 +81,38 @@ class DBConnection:
 
         return datalist, list(header)
 
+    def create_prediction(self, termin, time):
+
+        query = "CALL erzeugeHochrechnung('" + termin + "', '" + time + "');"
+        self.s.execute(query)
+        self.s.commit()
+
+    def get_predictions(self):
+
+        HR = self.Base.classes.hochrechnung
+
+        hrs = self.s.query(HR).all()
+
+        result = []
+        for hr in hrs:
+            result.append({"termin": hr.termin, "time": hr.zeitp})
+
+        return result
+
+    def get_prediction_data(self, termin, time):
+
+        hrresult = self.Base.classes.hrergebnis
+
+        hrs = self.s.query(hrresult).filter(hrresult.termin == termin, hrresult.zeitp == time).all()
+
+        datalist = []
+        for hr in hrs:
+            line = {}
+            line["Party"] = hr.pbez
+            line["Percentage"] = ("%.2f" % (hr.prozent * 100)) + "%"
+            datalist.append(line)
+
+        return datalist, ["Party", "Percentage"]
 
 
     def get_termine(self):

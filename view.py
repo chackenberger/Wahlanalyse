@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WahlAnalyse_GUI.ui'
 #
-# Created: Tue Apr 19 08:59:32 2016
+# Created: Tue Apr 19 21:58:59 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -76,6 +76,10 @@ class Ui_MainWindow(object):
         self.actionCut.setObjectName("actionCut")
         self.actionDuplicate_Row = QtGui.QAction(MainWindow)
         self.actionDuplicate_Row.setObjectName("actionDuplicate_Row")
+        self.actionCreate_Prediction = QtGui.QAction(MainWindow)
+        self.actionCreate_Prediction.setObjectName("actionCreate_Prediction")
+        self.actionShow_Prediction = QtGui.QAction(MainWindow)
+        self.actionShow_Prediction.setObjectName("actionShow_Prediction")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_as)
@@ -94,6 +98,9 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionDuplicate_Row)
         self.menuWindows.addAction(self.actionSave_DB)
         self.menuWindows.addAction(self.actionOpen_DB)
+        self.menuWindows.addSeparator()
+        self.menuWindows.addAction(self.actionCreate_Prediction)
+        self.menuWindows.addAction(self.actionShow_Prediction)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuWindows.menuAction())
@@ -148,4 +155,6 @@ class Ui_MainWindow(object):
         self.actionCut.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+X", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDuplicate_Row.setText(QtGui.QApplication.translate("MainWindow", "Duplicate Row", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDuplicate_Row.setStatusTip(QtGui.QApplication.translate("MainWindow", "Duplicate Row and insert after", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCreate_Prediction.setText(QtGui.QApplication.translate("MainWindow", "Create Prediction", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionShow_Prediction.setText(QtGui.QApplication.translate("MainWindow", "Show Prediction", None, QtGui.QApplication.UnicodeUTF8))
 

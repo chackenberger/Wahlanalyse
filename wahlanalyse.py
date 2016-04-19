@@ -3,6 +3,9 @@ from PySide.QtGui import QApplication, QMainWindow, QFileDialog, QUndoStack
 import sys
 from save_db import SaveToDBDialog
 from load_db import LoadFromDBDialog
+from create_pred import CreatePredDialog
+from choose_pred import ChoosePredDialog
+from show_pred import ShowPredDialog
 
 from csvutil import CSVUtil
 from dicttablemodel import DictTableModel
@@ -35,6 +38,8 @@ class WahlAnalyse(QMainWindow):
         self.gui.actionDuplicate_Row.triggered.connect(self.duplicate)
         self.gui.actionUndo.triggered.connect(self.undo)
         self.gui.actionRedo.triggered.connect(self.redo)
+        self.gui.actionCreate_Prediction.triggered.connect(self.open_create_pred)
+        self.gui.actionShow_Prediction.triggered.connect(self.open_choose_pred)
 
         self.gui.tableView.setSortingEnabled(True)
         self.gui.tableView.setItemDelegate(ItemDelegate(self.undoStack, self.set_unrdo_text))
@@ -43,6 +48,11 @@ class WahlAnalyse(QMainWindow):
 
         self.sdb_dialog = SaveToDBDialog(self)
         self.ldb_dialog = LoadFromDBDialog(self)
+        self.create_pred_dialog = CreatePredDialog(self)
+        self.choose_pred_dialog = ChoosePredDialog(self)
+        self.show_pred_dialog = ShowPredDialog(self)
+
+
 
         self.file = "."
 
@@ -92,6 +102,9 @@ class WahlAnalyse(QMainWindow):
         self.undoStack.clear()
         self.set_unrdo_text()
 
+    def create_prediction(self, termin, time):
+        self.db.create_prediction(termin, time)
+
     def open_save_db(self):
         self.setDisabled(True)
         self.sdb_dialog.setEnabled(True)
@@ -102,6 +115,25 @@ class WahlAnalyse(QMainWindow):
         self.setDisabled(True)
         self.ldb_dialog.setEnabled(True)
         self.ldb_dialog.show()
+
+    def open_create_pred(self):
+        self.create_pred_dialog.update_dates(self.db.get_termine())
+        self.setDisabled(True)
+        self.create_pred_dialog.setEnabled(True)
+        self.create_pred_dialog.show()
+
+    def open_choose_pred(self):
+        self.choose_pred_dialog.update_predictions(self.db.get_predictions())
+        self.setDisabled(True)
+        self.choose_pred_dialog.setEnabled(True)
+        self.choose_pred_dialog.show()
+
+    def show_prediction(self, termin, time):
+        datalist, header = self.db.get_prediction_data(termin, time)
+        self.show_pred_dialog.update_prediction(datalist, header, termin, time)
+        self.setDisabled(True)
+        self.show_pred_dialog.setEnabled(True)
+        self.show_pred_dialog.show()
 
     def set_unrdo_text(self):
         undo = "Undo"
