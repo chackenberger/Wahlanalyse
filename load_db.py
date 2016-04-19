@@ -26,5 +26,6 @@ class LoadFromDBDialog(QDialog):
         self.parent.setEnabled(True)
 
     def update_dates(self, termine):
+        self.gui.dateList.clear()
         for termin in termine:
             self.gui.dateList.addItem(str(termin[0]))

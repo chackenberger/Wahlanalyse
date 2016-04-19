@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'WahlAnalyse_GUI.ui'
 #
-# Created: Sun Apr 17 21:01:52 2016
+# Created: Tue Apr 19 08:59:32 2016
 #      by: pyside-uic 0.2.15 running on PySide 1.2.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -72,6 +72,10 @@ class Ui_MainWindow(object):
         self.actionSave_DB.setObjectName("actionSave_DB")
         self.actionOpen_DB = QtGui.QAction(MainWindow)
         self.actionOpen_DB.setObjectName("actionOpen_DB")
+        self.actionCut = QtGui.QAction(MainWindow)
+        self.actionCut.setObjectName("actionCut")
+        self.actionDuplicate_Row = QtGui.QAction(MainWindow)
+        self.actionDuplicate_Row.setObjectName("actionDuplicate_Row")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_as)
@@ -83,9 +87,11 @@ class Ui_MainWindow(object):
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionCopy)
         self.menuEdit.addAction(self.actionPaste)
+        self.menuEdit.addAction(self.actionCut)
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionAdd_Row)
         self.menuEdit.addAction(self.actionDelete_Row)
+        self.menuEdit.addAction(self.actionDuplicate_Row)
         self.menuWindows.addAction(self.actionSave_DB)
         self.menuWindows.addAction(self.actionOpen_DB)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -126,7 +132,7 @@ class Ui_MainWindow(object):
         self.actionPaste.setText(QtGui.QApplication.translate("MainWindow", "Paste", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPaste.setStatusTip(QtGui.QApplication.translate("MainWindow", "Paste", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPaste.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+V", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDelete_Row.setText(QtGui.QApplication.translate("MainWindow", "Delete Row", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDelete_Row.setText(QtGui.QApplication.translate("MainWindow", "Delete Rows", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDelete_Row.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete Row", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUndo.setText(QtGui.QApplication.translate("MainWindow", "Undo", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUndo.setStatusTip(QtGui.QApplication.translate("MainWindow", "Undo last Action", None, QtGui.QApplication.UnicodeUTF8))
@@ -137,4 +143,9 @@ class Ui_MainWindow(object):
         self.actionSave_DB.setText(QtGui.QApplication.translate("MainWindow", "Save to Database", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_DB.setStatusTip(QtGui.QApplication.translate("MainWindow", "Save data to Database", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpen_DB.setText(QtGui.QApplication.translate("MainWindow", "Open from Database", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCut.setText(QtGui.QApplication.translate("MainWindow", "Cut", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCut.setStatusTip(QtGui.QApplication.translate("MainWindow", "Cut", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCut.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+X", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDuplicate_Row.setText(QtGui.QApplication.translate("MainWindow", "Duplicate Row", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDuplicate_Row.setStatusTip(QtGui.QApplication.translate("MainWindow", "Duplicate Row and insert after", None, QtGui.QApplication.UnicodeUTF8))
 

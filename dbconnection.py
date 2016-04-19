@@ -27,7 +27,7 @@ class DBConnection:
             for k in data[0].keys():
                 if k not in ("T", "WV", "WK", "BZ", "SPR", "WBER", "ABG.", "UNG."):
                     p = Partei(bez=k)
-                    self.s.add(p)
+                    self.s.merge(p)
                     parteien.append(p)
 
             wahl = Wahl(termin=termin)

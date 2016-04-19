@@ -52,9 +52,11 @@
     <addaction name="separator"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
+    <addaction name="actionCut"/>
     <addaction name="separator"/>
     <addaction name="actionAdd_Row"/>
     <addaction name="actionDelete_Row"/>
+    <addaction name="actionDuplicate_Row"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
@@ -182,7 +184,7 @@
   </action>
   <action name="actionDelete_Row">
    <property name="text">
-    <string>Delete Row</string>
+    <string>Delete Rows</string>
    </property>
    <property name="statusTip">
     <string>Delete Row</string>
@@ -227,6 +229,25 @@
   <action name="actionOpen_DB">
    <property name="text">
     <string>Open from Database</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="statusTip">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionDuplicate_Row">
+   <property name="text">
+    <string>Duplicate Row</string>
+   </property>
+   <property name="statusTip">
+    <string>Duplicate Row and insert after</string>
    </property>
   </action>
  </widget>
