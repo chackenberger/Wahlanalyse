@@ -9,7 +9,7 @@ class ShowPredDialog(QDialog):
         self.parent = parent
         self.gui = Ui_show_prediction()
         self.gui.setupUi(self)
-        self.tbm = DictTableModel(datalist= [], header=[], parent=self)
+        self.tbm = DictTableModel(data= [], header=[], parent=self)
         self.gui.tableView.setSortingEnabled(True)
         self.gui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
@@ -24,7 +24,7 @@ class ShowPredDialog(QDialog):
         self.parent.setEnabled(True)
 
     def update_prediction(self, datalist, header, termin, time):
-        self.tbm.set_list(datalist, header)
+        self.tbm.set_data(datalist, header)
         self.gui.hrdesc.setText(str(termin) + " at " + str(time))
         self.gui.tableView.reset()
         self.gui.tableView.setModel(self.tbm)

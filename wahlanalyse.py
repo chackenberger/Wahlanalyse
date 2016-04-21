@@ -44,7 +44,7 @@ class WahlAnalyse(QMainWindow):
         self.gui.tableView.setSortingEnabled(True)
         self.gui.tableView.setItemDelegate(ItemDelegate(self.undoStack, self.set_unrdo_text))
 
-        self.tbm = DictTableModel(datalist=[], header=[], parent=self)
+        self.tbm = DictTableModel(data=[], header=[], parent=self)
 
         self.sdb_dialog = SaveToDBDialog(self)
         self.ldb_dialog = LoadFromDBDialog(self)
@@ -52,21 +52,19 @@ class WahlAnalyse(QMainWindow):
         self.choose_pred_dialog = ChoosePredDialog(self)
         self.show_pred_dialog = ShowPredDialog(self)
 
-
-
         self.file = "."
 
     def open_file(self):
         self.file = QFileDialog.getOpenFileName(self, "Choose File", filter="CSV-File (*.csv)")[0]
         if self.file != '':
             data, header = CSVUtil.read(self.file)
-            self.tbm.set_list(data, header)
+            self.tbm.set_data(data, header)
             self.gui.tableView.reset()
             self.gui.tableView.setModel(self.tbm)
 
     def save_file(self):
         if self.file != '' and self.file is not None:
-            CSVUtil.write(self.file, self.tbm.get_list())
+            CSVUtil.write(self.file, self.tbm.get_data())
 
     def save_file_as(self):
         self.file = QFileDialog.getSaveFileName(self, "CSV-Datei speichern", dir=self.file, filter="CSV-Datei (*.csv)")[
@@ -76,7 +74,7 @@ class WahlAnalyse(QMainWindow):
 
     def new_file(self):
         self.file = "."
-        self.tbm.set_list([],[])
+        self.tbm.set_data([], [])
         self.gui.tableView.reset()
         self.gui.tableView.setModel(self.tbm)
         self.undoStack.clear()
@@ -91,12 +89,12 @@ class WahlAnalyse(QMainWindow):
         selected_text = str(self.tbm.data(selected_index))
         clipboard.setText(selected_text)
 
-    def save_data_db(self,termin):
-        self.db.write_data(self.tbm.get_list(),termin)
+    def save_data_db(self, date):
+        self.db.write_data(self.tbm.get_data(), date)
 
-    def load_data_db(self, termin):
-        data, header = self.db.read_data(termin)
-        self.tbm.set_list(data, header)
+    def load_data_db(self, date):
+        data, header = self.db.read_data(date)
+        self.tbm.set_data(data, header)
         self.gui.tableView.reset()
         self.gui.tableView.setModel(self.tbm)
         self.undoStack.clear()
@@ -128,9 +126,9 @@ class WahlAnalyse(QMainWindow):
         self.choose_pred_dialog.setEnabled(True)
         self.choose_pred_dialog.show()
 
-    def show_prediction(self, termin, time):
-        datalist, header = self.db.get_prediction_data(termin, time)
-        self.show_pred_dialog.update_prediction(datalist, header, termin, time)
+    def show_prediction(self, date, time):
+        data, header = self.db.get_prediction_data(date, time)
+        self.show_pred_dialog.update_prediction(data, header, date, time)
         self.setDisabled(True)
         self.show_pred_dialog.setEnabled(True)
         self.show_pred_dialog.show()
@@ -138,40 +136,39 @@ class WahlAnalyse(QMainWindow):
     def set_unrdo_text(self):
         undo = "Undo"
         redo = "Redo"
-        undo_text = self.undoStack.undoText()
-        redo_text = self.undoStack.redoText()
-        if undo_text:
-            undo += " \"" + undo_text + "\""
-        if redo_text:
-            redo += " \"" + redo_text + "\""
+        undo_txt = self.undoStack.undoText()
+        redo_txt = self.undoStack.redoText()
+        if undo_txt:
+            undo += " \"" + undo_txt + "\""
+        if redo_txt:
+            redo += " \"" + redo_txt + "\""
         self.gui.actionUndo.setText(undo)
         self.gui.actionRedo.setText(redo)
 
-    def get_zero_column_selected_indexes(self):
-        selected_indexes = self.gui.tableView.selectedIndexes()
-        if not selected_indexes:
-            return
-        return [index for index in selected_indexes if not index.column()]
+    def get_sel_indexes(self):
+        sel_indexes = self.gui.tableView.selectedIndexes()
+        if sel_indexes:
+            return [index for index in sel_indexes if not index.column()]
 
-    def get_selection(self):
-        zero_column_selected_indexes = self.get_zero_column_selected_indexes()
-        if not zero_column_selected_indexes:
+    def get_sel(self):
+        sel_indexes = self.get_sel_indexes()
+        if not sel_indexes:
             return self.tbm.rowCount(self), 1
-        first_zero_column_selected_index = zero_column_selected_indexes[0]
-        zero_column_selected_indexes = self.get_zero_column_selected_indexes()
+        first_sel_index = sel_indexes[0]
+        sel_indexes = self.get_sel_indexes()
 
-        if not first_zero_column_selected_index or not first_zero_column_selected_index.isValid():
+        if not first_sel_index or not first_sel_index.isValid():
             return False
-        startingrow = first_zero_column_selected_index.row()
+        startingrow = first_sel_index.row()
 
-        return startingrow, len(zero_column_selected_indexes)
+        return startingrow, len(sel_indexes)
 
     def remove_rows(self):
-        if len(self.tbm.get_list()) == 0:
+        if len(self.tbm.get_data()) == 0:
             return
-        start, amount = self.get_selection()
-        if start != len(self.tbm.get_list()):
-            self.undoStack.beginMacro("Remove Row(s)")
+        start, amount = self.get_sel()
+        if start != len(self.tbm.get_data()):
+            self.undoStack.beginMacro("Remove Rows")
             self.undoStack.push(RemoveRowsCommand(self.tbm, start, amount))
             self.undoStack.endMacro()
             self.set_unrdo_text()
@@ -179,7 +176,7 @@ class WahlAnalyse(QMainWindow):
     def add_rows(self):
         if len(self.tbm.get_header()) == 0:
             return
-        start, amount = self.get_selection()
+        start, amount = self.get_sel()
 
         self.undoStack.beginMacro("Add Row")
         self.undoStack.push(InsertRowsCommand(self.tbm, start, 1))
@@ -193,7 +190,7 @@ class WahlAnalyse(QMainWindow):
         clipboard = QApplication.clipboard()
         index = self.gui.tableView.selectionModel().selectedIndexes()[0]
         command = EditCommand(self.tbm, index)
-        command.newValue(str(clipboard.text()))
+        command.newVal(str(clipboard.text()))
 
         self.undoStack.beginMacro("Paste")
         self.undoStack.push(command)
@@ -205,7 +202,7 @@ class WahlAnalyse(QMainWindow):
         self.copy()
         index = self.gui.tableView.selectionModel().selectedIndexes()[0]
         command = EditCommand(self.tbm, index)
-        command.newValue("")
+        command.newVal("")
         self.undoStack.beginMacro("Cut")
         self.undoStack.push(command)
         self.undoStack.endMacro()
@@ -216,7 +213,7 @@ class WahlAnalyse(QMainWindow):
         if len(self.gui.tableView.selectionModel().selectedIndexes()) == 0:
             return
 
-        start, amount = self.get_selection()
+        start, amount = self.get_sel()
         self.undoStack.beginMacro("Duplicate Row")
         self.undoStack.push(DuplicateRowCommand(self.tbm, start))
         self.undoStack.endMacro()

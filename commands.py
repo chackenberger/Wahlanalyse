@@ -33,8 +33,8 @@ class EditCommand(QUndoCommand):
     def setText(self, *args, **kwargs):
         super().setText(*args, **kwargs)
 
-    def newValue(self, newValue):
-        self.__newValue = newValue
+    def newVal(self, newVal):
+        self.__newValue = newVal
 
 class DuplicateRowCommand(QUndoCommand):
 
@@ -44,7 +44,7 @@ class DuplicateRowCommand(QUndoCommand):
         self.__index = index
 
     def redo(self):
-        self.__model.duplicateRow(self.__index)
+        self.__model.duplicate_row(self.__index)
 
     def undo(self):
         self.__model.removeRows(self.__index, 1)
@@ -74,8 +74,8 @@ class RemoveRowsCommand(QUndoCommand):
 
     def redo(self):
         self.__oldHeader = list(self.__model.get_header())
-        self.__oldList = list(self.__model.get_list())
+        self.__oldList = list(self.__model.get_data())
         self.__model.removeRows(self.__index, self.__amount)
 
     def undo(self):
-        self.__model.set_list(self.__oldList, self.__oldHeader)
+        self.__model.set_data(self.__oldList, self.__oldHeader)

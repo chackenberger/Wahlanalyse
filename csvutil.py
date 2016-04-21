@@ -3,9 +3,9 @@ from csv import Sniffer, DictReader, DictWriter
 class CSVUtil:
 
     @staticmethod
-    def read(filename):
+    def read(file):
 
-        with open(filename, "r") as csv:
+        with open(file, "r") as csv:
 
             sniffer = Sniffer()
             sample = csv.read(4096)
@@ -22,9 +22,9 @@ class CSVUtil:
             return lines, lines_reader.fieldnames
 
     @staticmethod
-    def write(filename, lines, delimiter=';'):
+    def write(file, lines, delimiter=';'):
 
-        with open(filename, 'w') as csv:
+        with open(file, 'w') as csv:
 
             if len(lines) == 0:
                 return

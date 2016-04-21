@@ -61,31 +61,35 @@ class DBConnection:
         r = self.s.execute(query).fetchall()
 
         header = OrderedSet(["WK", "BZ", "SPR", "WBER", "ABG", "UNG"])
-        datalist = []
-        line = {}
+        data = []
+        l = {}
         first_party = None
         for i in range(0, len(r)):
             current_party = r[i]["pbez"]
             if first_party is None or current_party == first_party:
-                line = {}
+                l = {}
                 first_party = current_party
-                line["WK"] = r[i]["id"]
-                line["BZ"] = r[i]["bnr"]
-                line["SPR"] = r[i]["snr"]
-                line["WBER"] = r[i]["berechtigte"]
-                line["ABG"] = r[i]["abgegeben"]
-                line["UNG"] = r[i]["ungueltige"]
-                datalist.append(line)
-            line[current_party] = r[i]["stimmanzahl"]
+                l["WK"] = r[i]["id"]
+                l["BZ"] = r[i]["bnr"]
+                l["SPR"] = r[i]["snr"]
+                l["WBER"] = r[i]["berechtigte"]
+                l["ABG"] = r[i]["abgegeben"]
+                l["UNG"] = r[i]["ungueltige"]
+                data.append(l)
+            l[current_party] = r[i]["stimmanzahl"]
             header.add(current_party)
 
-        return datalist, list(header)
+        return data, list(header)
 
     def create_prediction(self, termin, time):
 
-        query = "CALL erzeugeHochrechnung('" + termin + "', '" + time + "');"
-        self.s.execute(query)
-        self.s.commit()
+        try:
+            query = "CALL erzeugeHochrechnung('" + termin + "', '" + time + "');"
+            self.s.execute(query)
+            self.s.commit()
+        except:
+            self.s.rollback()
+            raise
 
     def get_predictions(self):
 
@@ -105,14 +109,14 @@ class DBConnection:
 
         hrs = self.s.query(hrresult).filter(hrresult.termin == termin, hrresult.zeitp == time).all()
 
-        datalist = []
+        data = []
         for hr in hrs:
-            line = {}
-            line["Party"] = hr.pbez
-            line["Percentage"] = ("%.2f" % (hr.prozent * 100)) + "%"
-            datalist.append(line)
+            l = {}
+            l["Party"] = hr.pbez
+            l["Percentage"] = ("%.2f" % (hr.prozent * 100)) + "%"
+            data.append(l)
 
-        return datalist, ["Party", "Percentage"]
+        return data, ["Party", "Percentage"]
 
 
     def get_termine(self):

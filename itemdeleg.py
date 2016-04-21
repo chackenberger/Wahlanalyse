@@ -12,7 +12,7 @@ class ItemDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         newValue = editor.text()
-        self.edit.newValue(newValue)
+        self.edit.newVal(newValue)
         self.undoStack.beginMacro("Edit Cell")
         self.undoStack.push(self.edit)
         self.undoStack.endMacro()
