@@ -25,7 +25,7 @@ class DBConnection:
         try:
             parteien = []
             for k in data[0].keys():
-                if k not in ("T", "WV", "WK", "BZ", "SPR", "WBER", "ABG.", "UNG."):
+                if k not in ("T", "WV", "WK", "BZ", "SPR", "WBER", "ABG", "UNG"):
                     p = Partei(bez=k)
                     self.s.merge(p)
                     parteien.append(p)
@@ -35,7 +35,7 @@ class DBConnection:
             self.s.merge(wahl)
 
             for l in data:
-                sp = Sprengel(snr=l["SPR"], bnr=l["BZ"], termin=termin, berechtigte=l["WBER"], ungueltige=l["UNG."], abgegeben=l["ABG."])
+                sp = Sprengel(snr=l["SPR"], bnr=l["BZ"], termin=termin, berechtigte=l["WBER"], ungueltige=l["UNG"], abgegeben=l["ABG"])
                 self.s.add(sp)
                 for p in parteien:
                     st = Stimmen(pbez=p.bez, snr=sp.snr, bnr=sp.bnr, termin=termin, stimmanzahl=int(l[p.bez]))
@@ -60,7 +60,7 @@ class DBConnection:
 
         r = self.s.execute(query).fetchall()
 
-        header = OrderedSet(["WK", "BZ", "SPR", "WBER", "ABG.", "UNG."])
+        header = OrderedSet(["WK", "BZ", "SPR", "WBER", "ABG", "UNG"])
         datalist = []
         line = {}
         first_party = None
@@ -73,8 +73,8 @@ class DBConnection:
                 line["BZ"] = r[i]["bnr"]
                 line["SPR"] = r[i]["snr"]
                 line["WBER"] = r[i]["berechtigte"]
-                line["ABG."] = r[i]["abgegeben"]
-                line["UNG."] = r[i]["ungueltige"]
+                line["ABG"] = r[i]["abgegeben"]
+                line["UNG"] = r[i]["ungueltige"]
                 datalist.append(line)
             line[current_party] = r[i]["stimmanzahl"]
             header.add(current_party)

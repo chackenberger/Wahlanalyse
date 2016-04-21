@@ -1,4 +1,4 @@
-from PySide.QtGui import QDialog
+from PySide.QtGui import QDialog, QAbstractItemView
 from show_pred_view import Ui_show_prediction
 from dicttablemodel import DictTableModel
 
@@ -11,6 +11,7 @@ class ShowPredDialog(QDialog):
         self.gui.setupUi(self)
         self.tbm = DictTableModel(datalist= [], header=[], parent=self)
         self.gui.tableView.setSortingEnabled(True)
+        self.gui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
 
     def accept(self, *args, **kwargs):
